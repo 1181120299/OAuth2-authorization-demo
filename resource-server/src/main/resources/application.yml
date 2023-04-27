@@ -1,6 +1,6 @@
 jack:
   oauth2:
-    auth-server-uri: http://192.168.1.103:9000
+    auth-server-uri: http://192.168.1.101:9000
     client-id: resource-server
     client-secret: secret
     client-ip: 192.168.1.101
