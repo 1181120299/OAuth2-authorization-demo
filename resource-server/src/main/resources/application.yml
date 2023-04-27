@@ -1,11 +1,13 @@
 jack:
   oauth2:
-    auth-server-uri: http://localhost:9000
+    auth-server-uri: http://192.168.1.103:9000
     client-id: resource-server
     client-secret: secret
     client-ip: 192.168.1.101
 server:
   port: 9001
+  servlet:
+    context-path: /resource
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
