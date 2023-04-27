@@ -9,8 +9,13 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/demo_auth_server?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.1.101:3306/demo_auth_server?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
     username: root
     password: test123456
   config:
     import: classpath:authserver.yml
+  rabbitmq:
+    host: 192.168.1.101
+    port: 5672
+    username: jack
+    password: 123456

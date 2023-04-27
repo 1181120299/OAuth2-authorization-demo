@@ -1,4 +1,4 @@
-package com.jack.defaultclientfirst.Controller;
+package com.jack.defaultclientfirst.controller;
 
 import com.jack.clientauthority.annotation.NeedPermission;
 import com.jack.utils.web.R;

@@ -1,4 +1,4 @@
-package com.jack.defaultclientfirst.Controller;
+package com.jack.defaultclientfirst.controller;
 
 import com.jack.clientauthority.annotation.CustomUserType;
 import com.jack.clientauthority.annotation.NeedPermission;
@@ -25,6 +25,9 @@ import java.util.List;
 @RequestMapping("/demo")
 public class DemoController {
 
+    @Value("${jack.oauth2.resource-server-uri}")
+    private String resourceServerUri;
+
     @NeedPermission("打招呼")
     @GetMapping("/helloJack")
     @ResponseBody
@@ -37,7 +40,7 @@ public class DemoController {
     public String requestOtherClient(Model model) {
         List<String> usernameList = Collections.emptyList();
 
-        String uri = "http://localhost:9001/user/usernameList";     // Fake uri, you can provide a client who`s name is client-second
+        String uri = resourceServerUri + "/user/usernameList";     // Fake uri, you can provide a client who`s name is client-second
         R resp = WebClientHelper.get(uri, R.class);
         if (resp.getCode() == R.getCodeOk()) {
             // do something
@@ -45,6 +48,7 @@ public class DemoController {
         }
 
         model.addAttribute("messages", usernameList);
+        model.addAttribute("user", UserHelper.getUserinfo());
         return "homePage";
     }
 
@@ -52,6 +56,7 @@ public class DemoController {
     @GetMapping("/foo")
     public String foo(Model model) {
         model.addAttribute("messages", List.of("3台电子秤", "1台桌面称"));
+        model.addAttribute("user", UserHelper.getUserinfo());
         return "homePage";
     }
 
@@ -66,11 +71,9 @@ public class DemoController {
     public String getUserinfo(Model model) {
         CustomUserType user = UserHelper.getUserinfo();
         model.addAttribute("messages", List.of(user));
+        model.addAttribute("user", UserHelper.getUserinfo());
         return "homePage";
     }
-
-    @Value("${fakeUri:http://192.168.1.101:9001}")
-    private String jumpUri;
 
     /**
      * 单点登录实现的是同域下的单点登录。假如你是通过192.168.1.101访问的A应用。
@@ -79,6 +82,6 @@ public class DemoController {
     @GetMapping("/jumpToOtherClient")
     public void jumpToOtherClient(HttpServletRequest request, HttpServletResponse response) throws IOException {
         RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-        redirectStrategy.sendRedirect(request, response, jumpUri);
+        redirectStrategy.sendRedirect(request, response, resourceServerUri);
     }
 }
