@@ -21,3 +21,9 @@ https://github.com/1181120299/client-authority
 授权服务依赖：com.jack.authserver
 
 https://github.com/1181120299/authserver
+
+
+
+资源服务项目：resource-server
+
+https://github.com/1181120299/resource-server
