@@ -24,6 +24,6 @@ https://github.com/1181120299/authserver
 
 
 
-资源服务项目：resource-server
+资源服务项目：resource-server（可以不用下载。demo中有代码副本）
 
 https://github.com/1181120299/resource-server
