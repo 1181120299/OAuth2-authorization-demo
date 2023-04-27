@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改用户</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.css" th:href="@{/webjars/bootstrap/css/bootstrap.css}" />
+</head>
+
+<body>
+
+<div style="width:400px;height:100%;margin-left:450px;margin-top:100px;">
+    <form id="clientForm">
+        <input type="hidden" name="oldUsername" th:value="${user.username}">
+        用户名<span style="color: red">*</span>：<span id="clientTip"></span><input class="form-control"  type="text" name="username" th:value="${user.username}" readonly placeholder="请输入用户名" autocomplete="off"><br>
+        密码：<input class="form-control"  type="password" name="password" placeholder="未更改" autocomplete="off"><br>
+        性 别：<select class="form-control" name="gender"><option value="1" th:selected="${user.gender==1}">男</option><option value="0" th:selected="${user.gender==0}">女</option></select><br>
+        爱 好：<input class="form-control" type="text"  name="hobby" th:value="${user.hobby}" autocomplete="off"><br>
+        <button class="btn btn-primary btn-lg btn-block" type="button" onclick="submitForm()">保存</button>
+    </form>
+</div>
+<a id="ctx" style="display: none" th:href="@{/}"></a>
+<script src="/webjars/jquery/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script>
+    let ctx = $('#ctx').attr("href");
+    console.log("ctx = ", ctx);
+
+    function submitForm() {
+        const param = {};
+        $($('#clientForm').serializeArray()).each(function () {
+            console.debug(this);
+            param[this.name] = this.value;
+        });
+
+        console.info(param);
+        $.ajax({
+            type: "POST",
+            url: ctx + "user/update",
+            data: JSON.stringify(param),
+            async: false,
+            dataType: "json",
+            contentType: "application/json",
+            error: function (request) {
+                alert("保存失败");
+            },
+            success: function (data) {
+                console.info(data);
+                alert(data.fixedMsg);
+                if (data.fixedCode === 200) {
+                    location.href = ctx + "user/page"
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
+

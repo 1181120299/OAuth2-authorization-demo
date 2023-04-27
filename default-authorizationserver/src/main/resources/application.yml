@@ -1,0 +1,16 @@
+jack:
+  oauth2:
+    github:
+      client-id: foo
+      client-secret: bar
+server:
+  port: 9000
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/demo_auth_server?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+    username: root
+    password: test123456
+  config:
+    import: classpath:authserver.yml
