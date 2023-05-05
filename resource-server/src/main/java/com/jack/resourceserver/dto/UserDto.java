@@ -49,4 +49,10 @@ public class UserDto {
 	 * 是否启用。true: 启用
 	 */
 	private Boolean enabled;
+
+	/**
+	 * 手机号，不允许重复
+	 */
+	@Length(max = 50, message = "爱好最多50个字符")
+	private String phone;
 }

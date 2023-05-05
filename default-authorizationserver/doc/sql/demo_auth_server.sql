@@ -11,7 +11,7 @@
  Target Server Version : 80030 (8.0.30)
  File Encoding         : 65001
 
- Date: 27/04/2023 13:52:21
+ Date: 05/05/2023 18:17:36
 */
 
 CREATE DATABASE demo_auth_server;
@@ -34,7 +34,7 @@ CREATE TABLE `authorities`  (
 -- ----------------------------
 -- Records of authorities
 -- ----------------------------
-INSERT INTO `authorities` VALUES ('chen', 'ROLE_USER');
+INSERT INTO `authorities` VALUES ('chenjiabao', 'ROLE_USER');
 INSERT INTO `authorities` VALUES ('jack', 'ROLE_USER');
 INSERT INTO `authorities` VALUES ('michael', 'ROLE_USER');
 
@@ -163,7 +163,6 @@ CREATE TABLE `oauth2_registered_client`  (
 -- Records of oauth2_registered_client
 -- ----------------------------
 INSERT INTO `oauth2_registered_client` VALUES ('1c2b589339a421a22fd761b02d0531e2', 'resource-server', '2023-04-26 13:10:28', '{noop}secret', NULL, '246e9986-e6cf-4751-8ff8-408565feccce', 'client_secret_basic', 'refresh_token,client_credentials,authorization_code', 'http://192.168.1.101:9001/resource/authorized,http://192.168.1.101:9001/resource/login/oauth2/code/jack-client-oidc', 'openid,profile,message.read,message.write', '{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.client.require-proof-key\":false,\"settings.client.require-authorization-consent\":false}', '{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.token.reuse-refresh-tokens\":true,\"settings.token.id-token-signature-algorithm\":[\"org.springframework.security.oauth2.jose.jws.SignatureAlgorithm\",\"RS256\"],\"settings.token.access-token-time-to-live\":[\"java.time.Duration\",300.000000000],\"settings.token.access-token-format\":{\"@class\":\"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat\",\"value\":\"self-contained\"},\"settings.token.refresh-token-time-to-live\":[\"java.time.Duration\",3600.000000000],\"settings.token.authorization-code-time-to-live\":[\"java.time.Duration\",300.000000000]}', '资源服务器', 'http://192.168.1.101:9001/resource');
-INSERT INTO `oauth2_registered_client` VALUES ('c163aa70b79f21d23c7bf5798d0257fd', 'test', '2023-04-27 16:43:35', '{noop}secret', NULL, 'bdcc6d5b-94fa-4ce5-a878-5fa60ba6aeca', 'client_secret_basic', 'refresh_token,client_credentials,authorization_code', 'http://192.168.1.101:8056/test/authorized,http://192.168.1.101:8056/test/login/oauth2/code/jack-client-oidc', 'openid,profile,message.read,message.write', '{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.client.require-proof-key\":false,\"settings.client.require-authorization-consent\":false}', '{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.token.reuse-refresh-tokens\":true,\"settings.token.id-token-signature-algorithm\":[\"org.springframework.security.oauth2.jose.jws.SignatureAlgorithm\",\"RS256\"],\"settings.token.access-token-time-to-live\":[\"java.time.Duration\",300.000000000],\"settings.token.access-token-format\":{\"@class\":\"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat\",\"value\":\"self-contained\"},\"settings.token.refresh-token-time-to-live\":[\"java.time.Duration\",3600.000000000],\"settings.token.authorization-code-time-to-live\":[\"java.time.Duration\",300.000000000]}', 'test', 'http://192.168.1.101:8056/test');
 INSERT INTO `oauth2_registered_client` VALUES ('d281cb3dc421716d685ed04d0b781a14', 'client-first', '2023-04-26 18:38:23', '{noop}secret', NULL, 'bd9380a6-7c6e-444e-b623-50abbc5069e3', 'client_secret_basic', 'refresh_token,client_credentials,authorization_code', 'http://192.168.1.101:8080/client-first/authorized,http://192.168.1.101:8080/client-first/login/oauth2/code/jack-client-oidc', 'openid,profile,message.read,message.write', '{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.client.require-proof-key\":false,\"settings.client.require-authorization-consent\":false}', '{\"@class\":\"java.util.Collections$UnmodifiableMap\",\"settings.token.reuse-refresh-tokens\":true,\"settings.token.id-token-signature-algorithm\":[\"org.springframework.security.oauth2.jose.jws.SignatureAlgorithm\",\"RS256\"],\"settings.token.access-token-time-to-live\":[\"java.time.Duration\",300.000000000],\"settings.token.access-token-format\":{\"@class\":\"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat\",\"value\":\"self-contained\"},\"settings.token.refresh-token-time-to-live\":[\"java.time.Duration\",3600.000000000],\"settings.token.authorization-code-time-to-live\":[\"java.time.Duration\",300.000000000]}', 'client的第一个例子', 'http://192.168.1.101:8080/client-first');
 
 -- ----------------------------
@@ -173,15 +172,17 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`  (
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名',
   `password` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '加密后的密码',
+  `phone` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号，不允许重复',
   `enabled` tinyint(1) NOT NULL COMMENT '是否启用。1：启用，0：禁用',
-  PRIMARY KEY (`username`) USING BTREE
+  PRIMARY KEY (`username`) USING BTREE,
+  UNIQUE INDEX `uk_phone`(`phone` ASC) USING BTREE COMMENT '手机号唯一'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户（spring security用户）' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('chen', '{bcrypt}$2a$10$LXtBmt.3GXSpnTMxodF04OIO6XGIZX8qa30zvP0nnu1TerCRFDwFO', 1);
-INSERT INTO `users` VALUES ('jack', '{bcrypt}$2a$10$HNWcgEl9PAFeeN389VFntuVHy8tpx0h/PzXgIuRoQjI/0t3AldSyW', 1);
-INSERT INTO `users` VALUES ('michael', '{bcrypt}$2a$10$YIva8lbxKynkdloBNbv2FeZlpNXk4/As3NMlLe3LM83kOK9av5OBq', 1);
+INSERT INTO `users` VALUES ('chenjiabao', '{bcrypt}$2a$10$Rq.OlHdZ8MJfAqeHUIyjGee.IsxPo3r.95ZoaIUMogtyww2n/Hv1a', '18077500665', 1);
+INSERT INTO `users` VALUES ('jack', '{bcrypt}$2a$10$HNWcgEl9PAFeeN389VFntuVHy8tpx0h/PzXgIuRoQjI/0t3AldSyW', NULL, 1);
+INSERT INTO `users` VALUES ('michael', '{bcrypt}$2a$10$YIva8lbxKynkdloBNbv2FeZlpNXk4/As3NMlLe3LM83kOK9av5OBq', NULL, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

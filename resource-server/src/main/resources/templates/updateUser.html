@@ -14,6 +14,7 @@
         用户名<span style="color: red">*</span>：<span id="clientTip"></span><input class="form-control"  type="text" name="username" th:value="${user.username}" readonly placeholder="请输入用户名" autocomplete="off"><br>
         密码：<input class="form-control"  type="password" name="password" placeholder="未更改" autocomplete="off"><br>
         性 别：<select class="form-control" name="gender"><option value="1" th:selected="${user.gender==1}">男</option><option value="0" th:selected="${user.gender==0}">女</option></select><br>
+        手机号：<span id="phoneTip"></span><input class="form-control"  type="text" name="phone" th:value="${user.phone}" oninput="checkPhone(this)" placeholder="请输入手机号" autocomplete="off"><br>
         爱 好：<input class="form-control" type="text"  name="hobby" th:value="${user.hobby}" autocomplete="off"><br>
         <button class="btn btn-primary btn-lg btn-block" type="button" onclick="submitForm()">保存</button>
     </form>
@@ -50,6 +51,28 @@
                 }
             }
         });
+    }
+
+    function checkPhone(obj) {
+        const phone = $(obj).val();
+        if (!phone) {
+            $('#phoneTip').text("");
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: ctx + "user/checkPhone?phone=" + phone + "&username=" + $('input[name="username"]').val(),
+            success: function (data) {
+                // do something
+                console.debug(data);
+                if (data.fixedCode === 200) {
+                    $("#phoneTip").text(data.fixedMsg).css("color", "green");
+                } else {
+                    $("#phoneTip").text(data.fixedMsg).css("color", "red");
+                }
+            }
+        })
     }
 </script>
 </body>

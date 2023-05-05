@@ -31,6 +31,7 @@
             <th style="text-align:center">序号</th>
             <th style="text-align:center">用户名</th>
             <th style="text-align:center">性别</th>
+            <th style="text-align:center">手机号</th>
             <th style="text-align:center">爱好</th>
             <th style="text-align:center">操作</th>
         </tr>
@@ -42,6 +43,7 @@
             <td style="vertical-align: middle!important;" th:text="${clientStat.index + 1}"></td>
             <td style="vertical-align: middle!important;" th:text="${client.username}"></td>
             <td style="vertical-align: middle!important;" th:text="${client.gender==1?'男':'女'}"></td>
+            <td style="vertical-align: middle!important;" th:text="${client.phone}"></td>
             <td style="vertical-align: middle!important;" th:text="${client.hobby}"></td>
             <td>
                 <!--         a标签用来定义超链接 href表示超链接-->

@@ -17,7 +17,7 @@
                         </form>-->
                         <div class="dropdown navbar-form navbar-right">
                             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span th:text="${user.username}"></span>
+                                <span th:if="${user}" th:text="${user.username}"></span>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">

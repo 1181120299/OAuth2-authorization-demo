@@ -3,6 +3,11 @@ jack:
     github:
       client-id: foo
       client-secret: bar
+  sms:
+    login:
+      sign-name: 陈家宝假发批发网
+      template-code: SMS_203726046
+      template-param: code
 server:
   port: 9000
 spring:

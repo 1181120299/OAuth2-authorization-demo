@@ -35,4 +35,8 @@ public class User implements CustomUserType {
 	*/
 	private String hobby;
 
+	/**
+	 * 手机号，不允许重复
+	 */
+	private String phone;
 }

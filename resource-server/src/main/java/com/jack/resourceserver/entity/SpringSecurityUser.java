@@ -41,4 +41,8 @@ public class SpringSecurityUser implements Serializable {
 	*/
 	private Boolean enabled;
 
+	/**
+	 * 手机号，不允许重复
+	 */
+	private String phone;
 }

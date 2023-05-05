@@ -51,4 +51,9 @@ public class User {
 	 * 是否启用。true: 启用
 	 */
 	private Boolean enabled;
+
+	/**
+	 * 手机号，不允许重复
+	 */
+	private String phone;
 }

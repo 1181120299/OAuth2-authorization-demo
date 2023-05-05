@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service("userService")
@@ -52,8 +53,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new RRException("用户名不能为空");
         }
 
+        if (!StringUtils.hasText(entity.getPhone())) {
+            entity.setPhone(null);
+        }
+
         // 检查用户名是否存在
         checkUsername(entity);
+
+        // 检查手机号是否存在
+        checkPhone(entity);
 
         // 密码加密处理
         entity.setPassword(encodePassword(entity.getPassword()));
@@ -61,11 +69,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int row = baseMapper.insert(entity);
 
         // 发布rabbitmq消息
-        SpringSecurityUser springSecurityUser = SpringSecurityUser.builder()
-                .username(entity.getUsername())
-                .password(entity.getPassword())
-                .enabled(true)
-                .build();
+        SpringSecurityUser springSecurityUser = new SpringSecurityUser();
+        BeanUtils.copyProperties(entity, springSecurityUser);
+        springSecurityUser.setEnabled(true);
         RabbitOperation<Object> rabbitOperation = RabbitOperation.builder()
                 .op(RabbitOperation.OP.ADD)
                 .data(springSecurityUser)
@@ -97,6 +103,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public void checkPhone(User user) {
+        if (!StringUtils.hasText(user.getPhone())) {
+            return;
+        }
+
+        if (user.getPhone().length() != 11) {
+            throw new RRException("手机号应为11位数");
+        }
+
+        String regex = "^1[3-9][0-9]{9}$";
+        boolean isMatch = Pattern.matches(regex, user.getPhone());
+        if (!isMatch) {
+            throw new RRException("手机号不合法");
+        }
+
+        User existedUser = baseMapper.selectOne(new LambdaQueryWrapper<User>()
+                .eq(User::getPhone, user.getPhone()));
+        if (Objects.isNull(existedUser)) {
+            return;
+        }
+
+        if (existedUser.getUsername().equals(user.getUsername())) {
+            return;
+        }
+
+        throw new RRException("手机号已存在");
+    }
+
+    @Override
     public boolean updateById(User entity) {
         if (StringUtils.hasText(entity.getPassword())) {
             entity.setPassword(encodePassword(entity.getPassword()));
@@ -104,6 +139,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 前端可能穿空字符串
             entity.setPassword(null);
         }
+
+        if (org.apache.commons.lang.StringUtils.isBlank(entity.getPhone())) {
+            entity.setPhone(null);
+        }
+
+        checkPhone(entity);
 
         SpringSecurityUser springSecurityUser = new SpringSecurityUser();
         BeanUtils.copyProperties(entity, springSecurityUser);

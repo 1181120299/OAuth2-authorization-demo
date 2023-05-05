@@ -74,6 +74,21 @@ public class UserController implements UserDataProvider {
 		return R.ok("可以使用");
 	}
 
+	/**
+	 * 检查手机号是否存在
+	 * @param phone	手机号
+	 * @return	fixCode=200 可以使用。500已存在
+	 */
+	@GetMapping("/checkPhone")
+	@ResponseBody
+	public R checkPhone(@RequestParam String phone, String username) {
+		userService.checkPhone(User.builder()
+				.phone(phone)
+				.username(username)
+				.build());
+		return R.ok("可以使用");
+	}
+
 	@GetMapping("/toUpdate/{username}")
 	public String toUpdate(@PathVariable("username") String username, Model model) {
 		User user = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));

@@ -19,4 +19,11 @@ public interface UserService extends IService<User> {
      * @throws com.jack.utils.web.RRException   如果用户名已经存在
      */
     void checkUsername(User entity);
+
+    /**
+     * 检查手机号是否存在
+     * @param user 用户信息
+     * @throws com.jack.utils.web.RRException   如果手机号已经存在
+     */
+    void checkPhone(User user);
 }
