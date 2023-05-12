@@ -8,6 +8,9 @@ jack:
       sign-name: 陈家宝假发批发网
       template-code: SMS_203726046
       template-param: code
+  remember-me:
+    validity-seconds: 604800
+    parameter-name: remember-me
 server:
   port: 9000
 spring:
